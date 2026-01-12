@@ -67,7 +67,10 @@ module.exports = {
         },
         {
           name: '원문 보기',
-          value: `\`/doc query:${doc.title} mode:full\``,
+          value: [
+            `\`/doc query:${doc.title} mode:full\``,
+            `\`/doc query:atlas mode:full\``
+          ].join('\n'),
           inline: false,
         }
       )
