@@ -8,11 +8,9 @@ if (!token) {
 const startUpChennel = process.env.START_UP_CHANNEL;
 if (!startUpChennel) startUpChennel = process.env.DEFAULT_CHANNEL;
 
-const client = new Client({ intents: [
-    GatewayIntentBits.Guilds, 
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-]});
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds],
+});
 
 client.once(Events.ClientReady, async (c) => {
     console.log(`Ready. Logged in as ${c.user.tag}`);
