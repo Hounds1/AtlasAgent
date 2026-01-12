@@ -47,9 +47,8 @@ const embed = new EmbedBuilder()
 .setTimestamp();
 
 module.exports = {
-    name: 'versions',
-
-    async execute(interaction) {
-      await interaction.reply(embed);
-    },
-  };
+  name: 'versions',
+  async execute(interaction) {
+    await interaction.reply({ embeds: [embed] });
+  },
+};
