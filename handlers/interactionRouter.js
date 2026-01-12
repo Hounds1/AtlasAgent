@@ -1,24 +1,23 @@
 const { Events } = require('discord.js');
-const ping = require('../commands/ping');
-const versions = require('../commands/versions');
 
-const commandMap = new Map([
-  [ping.name, ping], [versions.name, versions]
-]);
-
-function registerInteractionRouter(client) {
+function registerInteractionRouter(client, ctx) {
   client.on(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = commandMap.get(interaction.commandName);
-    if (!command) return;
-
     try {
-      await command.execute(interaction);
+      if (!interaction.isChatInputCommand()) return;
+
+      const command = ctx.commandMap.get(interaction.commandName);
+      if (!command) return;
+
+      await command.execute(interaction, ctx);
     } catch (err) {
       console.error('Command execute error:', err);
-      if (interaction.isRepliable() && !interaction.replied && !interaction.deferred) {
-        await interaction.reply({ content: '명령 처리 중 오류가 발생했습니다.', ephemeral: true });
+
+      const payload = { content: '명령 처리 중 오류가 발생했습니다.', ephemeral: true };
+
+      if (interaction.deferred || interaction.replied) {
+        await interaction.editReply(payload).catch(() => {});
+      } else {
+        await interaction.reply(payload).catch(() => {});
       }
     }
   });

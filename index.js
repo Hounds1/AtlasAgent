@@ -1,6 +1,10 @@
+const path = require('path');
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 const { registerInteractionRouter } = require('./handlers/interactionRouter');
 const { atlas } = require('./config.json');
+const { ping } = require('./commands/ping');
+const { versions } = require('./commands/versions');
+const { loadDocs, findDocBest, searchDocs, splitForDiscord } = require('./docs/docStore');
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -32,6 +36,30 @@ client.once(Events.ClientReady, async (c) => {
     }
   });
 
-registerInteractionRouter(client);
+const docsCmd = require('./commands/docs');
+const docCmd = require('./commands/doc');
+const searchCmd = require('./commands/search');
+
+const docsDirAbs = path.join(process.cwd(), 'docs');
+const docs = loadDocs(docsDirAbs);
+
+const commandMap = new Map([
+  [ping.name, ping],
+  [versions.name, versions],
+  [docsCmd.name, docsCmd],
+  [docCmd.name, docCmd],
+  [searchCmd.name, searchCmd],
+]);
+
+const ctx = {
+  docs,
+  commandMap,
+  findDocBest,
+  searchDocs,
+  splitForDiscord,
+};
+
+
+registerInteractionRouter(client, ctx);
 
 client.login(token);

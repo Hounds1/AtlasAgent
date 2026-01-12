@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 
 const embed = new EmbedBuilder()
 .setTitle('Atlas Agent · 기술 스택')
-.setDescription('현재 프로젝트에서 사용 중인 런타임 및 도구 버전입니다.')
+.setDescription('이 버전을 추천드립니다.')
 .setColor(0x2B2F36)
 .addFields(
   {
