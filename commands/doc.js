@@ -39,7 +39,7 @@ module.exports = {
     if (!doc) {
       return interaction.reply({
         content: `문서를 찾지 못했습니다. query="${query}"\n/docs 로 목록을 확인하십시오.`,
-        ephemeral: true,
+        ephemeral: false,
       });
     }
 
@@ -60,10 +60,10 @@ module.exports = {
       const tableFields = tablesToEmbedFields(tables, 10);
       if (tableFields.length) embed.addFields(tableFields);
 
-      return interaction.reply({ embeds: [embed], ephemeral: true });
+      return interaction.reply({ embeds: [embed], ephemeral: false });
     }
 
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: false });
 
     const chunks = splitForDiscord(cleaned, 1800);
     if (!chunks.length) {
@@ -71,7 +71,7 @@ module.exports = {
     } else {
       await interaction.editReply({ content: chunks[0] });
       for (let i = 1; i < chunks.length; i++) {
-        await interaction.followUp({ content: chunks[i], ephemeral: true });
+        await interaction.followUp({ content: chunks[i], ephemeral: false });
       }
     }
 
@@ -79,14 +79,14 @@ module.exports = {
       const embeds = buildTableEmbeds(EmbedBuilder, doc.title, tables);
       const limited = embeds.slice(0, 3);
       for (const e of limited) {
-        await interaction.followUp({ embeds: [e], ephemeral: true });
+        await interaction.followUp({ embeds: [e], ephemeral: false });
       }
 
       const omitted = embeds.length - limited.length;
       if (omitted > 0) {
         await interaction.followUp({
           content: `(표 임베드 ${omitted}개는 출력 제한으로 생략되었습니다.)`,
-          ephemeral: true,
+          ephemeral: false,
         });
       }
     }

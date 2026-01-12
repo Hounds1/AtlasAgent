@@ -15,12 +15,12 @@ module.exports = {
 
     if (!docs.length) {
       embed.setDescription('docs/ 폴더에 문서가 없습니다.');
-      return interaction.reply({ embeds: [embed], ephemeral: true });
+      return interaction.reply({ embeds: [embed], ephemeral: false });
     }
 
     const lines = docs.map((d, i) => `${i + 1}. ${d.title}`);
     embed.setDescription(lines.join('\n'));
 
-    return interaction.reply({ embeds: [embed], ephemeral: true });
+    return interaction.reply({ embeds: [embed], ephemeral: false });
   },
 };
