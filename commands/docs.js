@@ -1,7 +1,12 @@
-const { EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+
+const NAME = 'docs';
 
 module.exports = {
-  name: 'docs',
+  name: NAME,
+  data: new SlashCommandBuilder()
+  .setName('docs')
+  .setDescription('문서 목록을 표시합니다.'),
   async execute(interaction, ctx) {
     const { docs } = ctx;
     const embed = new EmbedBuilder()

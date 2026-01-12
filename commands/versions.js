@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const embed = new EmbedBuilder()
 .setTitle('Atlas Agent · 기술 스택')
@@ -46,8 +46,13 @@ const embed = new EmbedBuilder()
 .setFooter({ text: 'Atlas Agent · Information Assistant' })
 .setTimestamp();
 
+const NAME = 'versions'
+
 module.exports = {
-  name: 'versions',
+  name: NAME,
+  data: new SlashCommandBuilder()
+  .setName('versions')
+  .setDescription('추천하는 버전표를 불러옵니다.'),
   async execute(interaction) {
     await interaction.reply({ embeds: [embed] });
   },

@@ -1,7 +1,17 @@
-const { EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+
+const NAME = 'search';
 
 module.exports = {
-  name: 'search',
+  name: NAME,
+  data: new SlashCommandBuilder()
+  .setName('search')
+  .setDescription('문서에서 키워드를 검색합니다.')
+  .addStringOption((opt) =>
+    opt.setName('query')
+      .setDescription('검색어')
+      .setRequired(true)
+  ),
   async execute(interaction, ctx) {
     const { docs, searchDocs } = ctx;
 

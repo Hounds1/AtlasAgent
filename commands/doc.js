@@ -1,7 +1,26 @@
-const { EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+
+const NAME = 'doc';
 
 module.exports = {
-  name: 'doc',
+  name: NAME,
+  data: new SlashCommandBuilder()
+    .setName('doc')
+    .setDescription('문서를 조회합니다.')
+    .addStringOption((opt) =>
+      opt.setName('query')
+        .setDescription('문서명(일부) 또는 키워드')
+        .setRequired(true)
+    )
+    .addStringOption((opt) =>
+      opt.setName('mode')
+        .setDescription('preview 또는 full')
+        .addChoices(
+          { name: 'preview', value: 'preview' },
+          { name: 'full', value: 'full' }
+        )
+        .setRequired(false)
+    ),
   async execute(interaction, ctx) {
     const {
       docs,
