@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Intelligent Agent",
   "license": "ISC",
-  "author": "",
+  "author": "Hounds",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start":  "node index.js"
   },
   "dependencies": {
     "discord.js": "^14.25.1"
