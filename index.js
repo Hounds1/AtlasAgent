@@ -2,8 +2,6 @@ const path = require('path');
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 const { registerInteractionRouter } = require('./handlers/interactionRouter');
 const { atlas } = require('./config.json');
-const { ping } = require('./commands/ping');
-const { versions } = require('./commands/versions');
 const { loadDocs, findDocBest, searchDocs, splitForDiscord,
   extractMarkdownTables, tablesToEmbedFields, buildTableEmbeds } = require('./repository/docStore');
 
@@ -40,6 +38,8 @@ client.once(Events.ClientReady, async (c) => {
 const docsCmd = require('./commands/docs');
 const docCmd = require('./commands/doc');
 const searchCmd = require('./commands/search');
+const ping = require('./commands/ping');
+const versions = require('./commands/versions');
 
 const docsDirAbs = path.join(process.cwd(), 'docs');
 const docs = loadDocs(docsDirAbs);
