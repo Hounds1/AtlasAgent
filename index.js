@@ -4,7 +4,8 @@ const { registerInteractionRouter } = require('./handlers/interactionRouter');
 const { atlas } = require('./config.json');
 const { ping } = require('./commands/ping');
 const { versions } = require('./commands/versions');
-const { loadDocs, findDocBest, searchDocs, splitForDiscord } = require('./docs/docStore');
+const { loadDocs, findDocBest, searchDocs, splitForDiscord,
+  extractMarkdownTables, tablesToEmbedFields, buildTableEmbeds } = require('./repository/docStore');
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -57,6 +58,9 @@ const ctx = {
   findDocBest,
   searchDocs,
   splitForDiscord,
+  extractMarkdownTables,
+  tablesToEmbedFields,
+  buildTableEmbeds,
 };
 
 
