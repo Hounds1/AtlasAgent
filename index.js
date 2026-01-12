@@ -1,12 +1,21 @@
 const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { atlas } = require('./config.json');
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
   throw new Error('DISCORD_TOKEN is not set. Please set environment variable DISCORD_TOKEN.');
 }
 
-const startUpChennel = process.env.START_UP_CHANNEL;
-if (!startUpChennel) startUpChennel = process.env.DEFAULT_CHANNEL;
+let startUpChennel;
+
+const stage = atlas.stage;
+if (stage === 'study') {
+    startUpChennel = process.env.AGENT_CHANNEL;
+} else if (stage === 'test') {
+    startUpChennel = process.env.START_UP_CHANNEL;
+
+    if (!startUpChennel) startUpChennel = process.env.DEFAULT_CHANNEL;
+}
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds],
