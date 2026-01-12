@@ -1,8 +1,9 @@
 const { Events } = require('discord.js');
 const ping = require('../commands/ping');
+const versions = require('../commands/versions');
 
 const commandMap = new Map([
-  [ping.name, ping],
+  [ping.name, ping], [versions.name, versions]
 ]);
 
 function registerInteractionRouter(client) {
