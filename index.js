@@ -20,9 +20,16 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds],
 });
 
+const QUIET_HOURS_ENABLED = (process.env.QUIET_HOURS_ENABLED || 'true') === 'true';
+
 client.once(Events.ClientReady, async (c) => {
     console.log(`Ready. Logged in as ${c.user.tag}`);
   
+    if (QUIET_HOURS_ENABLED && isQuietHoursKST()) {
+      console.log('[Atlas] Quiet hours (KST 22:00~08:00). Skip startup announcements.');
+      return;
+    }
+
     const channel = await c.channels.fetch(startUpChannel);
     if (channel?.isTextBased()) {
       await channel.send('Intelligent System Analytic Computer is activated. All Atlas systems are functional and online.');
@@ -67,3 +74,15 @@ const ctx = {
 registerInteractionRouter(client, ctx);
 
 client.login(token);
+
+function isQuietHoursKST(date = new Date()) {
+  const kstHour = Number(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Seoul',
+      hour: '2-digit',
+      hour12: false,
+    }).format(date)
+  );
+
+  return kstHour >= 22 || kstHour < 8;
+}
