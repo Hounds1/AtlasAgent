@@ -1,7 +1,7 @@
 const path = require('path');
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 const { registerInteractionRouter } = require('./handlers/interactionRouter');
-const { atlas } = require('./config.json');
+const { atlasSetup } = require('./config.json');
 const { loadDocs, findDocBest, searchDocs, splitForDiscord,
   extractMarkdownTables, tablesToEmbedFields, buildTableEmbeds } = require('./repository/docStore');
 
@@ -10,16 +10,11 @@ if (!token) {
   throw new Error('DISCORD_TOKEN is not set. Please set environment variable DISCORD_TOKEN.');
 }
 
-let startUpChennel;
+const stage = (process.env.ATLAS_STAGE || '').toLowerCase();
 
-const stage = atlas.stage;
-if (stage === 'study') {
-    startUpChennel = process.env.AGENT_CHANNEL;
-} else if (stage === 'test') {
-    startUpChennel = process.env.START_UP_CHANNEL;
-
-    if (!startUpChennel) startUpChennel = process.env.DEFAULT_CHANNEL;
-}
+const base = process.env.START_UP_CHANNEL || process.env.DEFAULT_CHANNEL;
+const startUpChannel = 
+        stage === 'buddies' ? (process.env.AGENT_CHANNEL || base) : base;
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds],
@@ -28,23 +23,28 @@ const client = new Client({
 client.once(Events.ClientReady, async (c) => {
     console.log(`Ready. Logged in as ${c.user.tag}`);
   
-    const channel = await c.channels.fetch(startUpChennel);
+    const channel = await c.channels.fetch(startUpChannel);
     if (channel?.isTextBased()) {
       await channel.send('Intelligent System Analytic Computer is activated. All Atlas systems are functional and online.');
       await channel.send('Atlas Agent ready to intelligence support.');
     }
   });
 
+//commands
+const atlas = require('./commands/atlas');
+const help = require('./commands/help');
+const ping = require('./commands/ping');
+const versions = require('./commands/versions');
 const docsCmd = require('./commands/docs');
 const docCmd = require('./commands/doc');
 const searchCmd = require('./commands/search');
-const ping = require('./commands/ping');
-const versions = require('./commands/versions');
 
 const docsDirAbs = path.join(process.cwd(), 'docs');
 const docs = loadDocs(docsDirAbs);
 
 const commandMap = new Map([
+  [atlas.name, atlas],
+  [help.name, help],
   [ping.name, ping],
   [versions.name, versions],
   [docsCmd.name, docsCmd],
