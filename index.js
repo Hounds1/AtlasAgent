@@ -1,4 +1,5 @@
 const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { registerInteractionRouter } = require('./handlers/interactionRouter');
 const { atlas } = require('./config.json');
 
 const token = process.env.DISCORD_TOKEN;
@@ -31,12 +32,6 @@ client.once(Events.ClientReady, async (c) => {
     }
   });
 
-client.on(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-  
-    if (interaction.commandName === 'ping') {
-      await interaction.reply('pong');
-    }
-});
+registerInteractionRouter(client);
 
 client.login(token);
