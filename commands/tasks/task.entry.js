@@ -6,6 +6,14 @@ const embed = new EmbedBuilder()
   .setColor(0x2B2F36)
   .addFields(
     {
+        name: '구현',
+        value: [
+          '**/task1**',
+          '업체 / 계정 도메인의 요구 사항을 출력합니다.',
+        ].join('\n'),
+        inline: false,
+    },
+    {
         name: '업체 / 계정',
         value: [
           '**/task1**',

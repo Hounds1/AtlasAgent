@@ -72,5 +72,5 @@ function codeBlock(lang, body) {
     ),
   ];
   
-  module.exports = { COMPANY_DOC };
+  module.exports = { COMPANY_SPEC_MESSAGES };
   
