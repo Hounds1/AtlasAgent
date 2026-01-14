@@ -71,6 +71,8 @@ function codeBlock(lang, body) {
       ].join('\n')
     ),
   ];
-  
-  module.exports = { COMPANY_SPEC_MESSAGES };
-  
+
+  // task.first.js에서 COMPANY_DOC 이름으로 사용하므로, 그에 맞춰 export 정규화
+  const COMPANY_DOC = COMPANY_SPEC_MESSAGES;
+
+  module.exports = { COMPANY_DOC };
