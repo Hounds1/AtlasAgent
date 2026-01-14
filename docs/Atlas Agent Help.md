@@ -13,4 +13,5 @@ Commands
 		- full: 문서 전체를 출력합니다.
 - search: Atlas Agent가 키워드가 포함된 문서를 탐색합니다.
 	- query: 키워드를 입력합니다.
+- nest-cli: Nest CLI 명령어를 출력합니다.
 ```

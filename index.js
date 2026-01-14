@@ -86,5 +86,5 @@ function isQuietHoursKST(date = new Date()) {
     }).format(date)
   );
 
-  return kstHour >= 22 || kstHour < 8;
+  return kstHour >= 21 || kstHour < 8;
 }
