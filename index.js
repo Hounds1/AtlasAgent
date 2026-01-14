@@ -2,8 +2,6 @@ const path = require('path');
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 const { registerInteractionRouter } = require('./handlers/interactionRouter');
 const { atlasSetup } = require('./config.json');
-const { loadDocs, findDocBest, searchDocs, splitForDiscord,
-  extractMarkdownTables, tablesToEmbedFields, buildTableEmbeds } = require('./repository/docStore');
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -42,34 +40,22 @@ const atlas = require('./commands/atlas');
 const help = require('./commands/help');
 const ping = require('./commands/ping');
 const versions = require('./commands/versions');
-const docsCmd = require('./commands/docs');
-const docCmd = require('./commands/doc');
-const searchCmd = require('./commands/search');
 const nestCliCmd = require('./commands/nest.cli');
-
-const docsDirAbs = path.join(process.cwd(), 'docs');
-const docs = loadDocs(docsDirAbs);
+const tasks = require('./commands/tasks/task.entry');
+const task1 = require('./commands/tasks/task.first');
 
 const commandMap = new Map([
   [atlas.name, atlas],
   [help.name, help],
   [ping.name, ping],
   [versions.name, versions],
-  [docsCmd.name, docsCmd],
-  [docCmd.name, docCmd],
-  [searchCmd.name, searchCmd],
-  [nestCliCmd.name, nestCliCmd]
+  [nestCliCmd.name, nestCliCmd],
+  [tasks.name, tasks],
+  [task1.name, task1]
 ]);
 
 const ctx = {
-  docs,
   commandMap,
-  findDocBest,
-  searchDocs,
-  splitForDiscord,
-  extractMarkdownTables,
-  tablesToEmbedFields,
-  buildTableEmbeds,
 };
 
 
