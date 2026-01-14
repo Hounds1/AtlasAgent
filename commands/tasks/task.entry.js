@@ -8,8 +8,8 @@ const embed = new EmbedBuilder()
     {
         name: '구현',
         value: [
-          '**/task1**',
-          '업체 / 계정 도메인의 요구 사항을 출력합니다.',
+          '**자유롭게 구현 해야합니다.**',
+          '최소 조건을 지키면서 여러분의 시스템을 자유롭게 구현해보세요.',
         ].join('\n'),
         inline: false,
     },
