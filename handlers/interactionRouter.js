@@ -1,26 +1,24 @@
 const { Events } = require('discord.js');
+const { applyQuietPolicy } = require('../lib/silence.policy');
 
-function registerInteractionRouter(client, ctx) {
-  client.on(Events.InteractionCreate, async (interaction) => {
-    try {
-      if (!interaction.isChatInputCommand()) return;
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
 
-      const command = ctx.commandMap.get(interaction.commandName);
-      if (!command) return;
+  const cmd = commandMap.get(interaction.commandName);
+  if (!cmd) return;
 
-      await command.execute(interaction, ctx);
-    } catch (err) {
-      console.error('Command execute error:', err);
+  const ctx = { commandMap };
 
-      const payload = { content: '명령 처리 중 오류가 발생했습니다.', ephemeral: true };
+  const restore = applyQuietPolicy(interaction, { quietHours: true });
 
-      if (interaction.deferred || interaction.replied) {
-        await interaction.editReply(payload).catch(() => {});
-      } else {
-        await interaction.reply(payload).catch(() => {});
-      }
+  try {
+    if (cmd.execute.length >= 2) {
+      await cmd.execute(interaction, ctx);
+    } else {
+      await cmd.execute(interaction);
     }
-  });
-}
-
-module.exports = { registerInteractionRouter };
+  } finally {
+    
+    restore();
+  }
+});

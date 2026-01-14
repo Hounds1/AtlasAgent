@@ -11,6 +11,10 @@ module.exports = {
     .setDescription('업체(Company) 요구사항을 출력합니다.'),
 
   async execute(interaction) {
-    await deployInteraction(interaction, COMPANY_DOC, { ephemeral: true });
+    await deployInteraction(interaction, COMPANY_DOC, {
+        ephemeral: true,
+        quietHours: true,
+        suppressEmbeds: false,
+      });
   },
 };

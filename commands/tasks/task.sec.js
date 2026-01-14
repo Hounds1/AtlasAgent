@@ -11,6 +11,10 @@ module.exports = {
     .setDescription('계정(Account) 요구사항을 출력합니다.'),
 
   async execute(interaction) {
-    await deployInteraction(interaction, ACCOUNT_DOC, { ephemeral: true });
+    await deployInteraction(interaction, ACCOUNT_DOC, {
+        ephemeral: true,
+        quietHours: true,
+        suppressEmbeds: false,
+      });
   },
 };
