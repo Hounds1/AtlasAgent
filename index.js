@@ -43,6 +43,7 @@ const versions = require('./commands/versions');
 const nestCliCmd = require('./commands/nest.cli');
 const tasks = require('./commands/tasks/task.entry');
 const task1 = require('./commands/tasks/task.first');
+const task2 = require('./commands/tasks/task.sec');
 
 const commandMap = new Map([
   [atlas.name, atlas],
@@ -51,7 +52,8 @@ const commandMap = new Map([
   [versions.name, versions],
   [nestCliCmd.name, nestCliCmd],
   [tasks.name, tasks],
-  [task1.name, task1]
+  [task1.name, task1],
+  [task2.name, task2]
 ]);
 
 const ctx = {

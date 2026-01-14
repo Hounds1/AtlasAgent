@@ -2,7 +2,7 @@ function codeBlock(lang, body) {
     return `\`\`\`${lang}\n${body}\n\`\`\``;
     }
   
-  const COMPANY_SPEC_MESSAGES = [
+  const COMPANY_DOC = [
     codeBlock(
       'md',
       [
@@ -71,8 +71,5 @@ function codeBlock(lang, body) {
       ].join('\n')
     ),
   ];
-
-  // task.first.js에서 COMPANY_DOC 이름으로 사용하므로, 그에 맞춰 export 정규화
-  const COMPANY_DOC = COMPANY_SPEC_MESSAGES;
 
   module.exports = { COMPANY_DOC };
