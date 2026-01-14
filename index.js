@@ -45,6 +45,7 @@ const versions = require('./commands/versions');
 const docsCmd = require('./commands/docs');
 const docCmd = require('./commands/doc');
 const searchCmd = require('./commands/search');
+const nestCliCmd = require('./commands/nest.cli');
 
 const docsDirAbs = path.join(process.cwd(), 'docs');
 const docs = loadDocs(docsDirAbs);
@@ -57,6 +58,7 @@ const commandMap = new Map([
   [docsCmd.name, docsCmd],
   [docCmd.name, docCmd],
   [searchCmd.name, searchCmd],
+  [nestCliCmd.name, nestCliCmd]
 ]);
 
 const ctx = {

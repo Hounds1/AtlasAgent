@@ -54,6 +54,6 @@ module.exports = {
   .setName('versions')
   .setDescription('추천하는 버전표를 불러옵니다.'),
   async execute(interaction) {
-    await interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed], ephemeral: false });
   },
 };
