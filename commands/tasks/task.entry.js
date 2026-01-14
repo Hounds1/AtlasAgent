@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const embed = new EmbedBuilder()
-  .setTitle('Atlas Agent · Nest CLI')
-  .setDescription('자주 쓰는 Nest CLI 명령어/옵션 모음입니다. (상세: `nest <command> --help`)')
+  .setTitle('Atlas Agent · Study Missions')
+  .setDescription('주어진 조건에 따라 당신만의 시스템을 구현해주세요.')
   .setColor(0x2B2F36)
   .addFields(
     {

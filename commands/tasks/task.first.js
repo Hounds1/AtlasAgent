@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { deployInteraction } = require('./deploy.interaction');
+const { deployInteraction } = require('./interaction/deploy.interaction');
 const { COMPANY_DOC } = require('./docs/company');
 
 const NAME = 'task1';
