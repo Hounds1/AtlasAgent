@@ -1,24 +1,27 @@
 const { Events } = require('discord.js');
 const { applyQuietPolicy } = require('../lib/silence.policy');
 
-client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
+function registerInteractionRouter(client, ctx) {
+  const { commandMap } = ctx;
 
-  const cmd = commandMap.get(interaction.commandName);
-  if (!cmd) return;
+  client.on(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isChatInputCommand()) return;
 
-  const ctx = { commandMap };
+    const cmd = commandMap.get(interaction.commandName);
+    if (!cmd) return;
 
-  const restore = applyQuietPolicy(interaction, { quietHours: true });
+    const restore = applyQuietPolicy(interaction, { quietHours: true });
 
-  try {
-    if (cmd.execute.length >= 2) {
-      await cmd.execute(interaction, ctx);
-    } else {
-      await cmd.execute(interaction);
+    try {
+      if (cmd.execute.length >= 2) {
+        await cmd.execute(interaction, ctx);
+      } else {
+        await cmd.execute(interaction);
+      }
+    } finally {
+      restore();
     }
-  } finally {
-    
-    restore();
-  }
-});
+  });
+}
+
+module.exports = { registerInteractionRouter };
