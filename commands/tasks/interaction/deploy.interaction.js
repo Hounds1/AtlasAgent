@@ -30,6 +30,7 @@ async function deployInteraction(interaction, messages, options = {}) {
     ephemeral = true,
     quietHours = true,
     suppressEmbeds = false,
+    notifyDone = false,
   } = options;
 
   if (!interaction.channel) {
@@ -51,7 +52,6 @@ async function deployInteraction(interaction, messages, options = {}) {
   messages.forEach((m, i) => assertLen(`messages[${i}]`, m));
 
   const silent = quietHours && isQuietHoursKST();
-
   const flags =
     silent
       ? (suppressEmbeds
@@ -68,28 +68,24 @@ async function deployInteraction(interaction, messages, options = {}) {
       });
     }
 
-    try {
-      if (interaction.deferred) {
-        await interaction.editReply('전송 완료입니다.');
-      } else if (interaction.replied) {
-        await interaction.editReply('전송 완료입니다.');
-      } else {
-        await interaction.followUp({ content: '전송 완료입니다.', ephemeral });
-      }
-    } catch (_) {
+    if (notifyDone) {
+      try {
+        if (interaction.replied || interaction.deferred) {
+          await interaction.editReply('전송 완료입니다.');
+        } else {
+          await interaction.followUp({ content: '전송 완료입니다.', ephemeral });
+        }
+      } catch (_) {}
     }
   } catch (err) {
     const msg = err?.message ? `전송 실패: ${err.message}` : '전송 실패입니다.';
     try {
-      if (interaction.deferred) {
-        await interaction.editReply(msg);
-      } else if (interaction.replied) {
+      if (interaction.replied || interaction.deferred) {
         await interaction.editReply(msg);
       } else {
         await interaction.followUp({ content: msg, ephemeral: true });
       }
-    } catch (_) {
-    }
+    } catch (_) {}
   }
 }
 
