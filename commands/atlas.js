@@ -19,6 +19,8 @@ module.exports = {
     .setDescription('지원 명령과 사용 방법을 표시합니다.'),
 
   async execute(interaction, ctx) {
+    const preview = 'Atlas Agent에서 지원하는 주요 슬래시 명령입니다.';
+
     const embed = new EmbedBuilder()
       .setTitle('Atlas Agent · 도움말')
       .setDescription(preview)
