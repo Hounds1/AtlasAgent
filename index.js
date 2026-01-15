@@ -1,5 +1,5 @@
 const path = require('path');
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
 const { registerInteractionRouter } = require('./handlers/interactionRouter');
 const { atlasSetup } = require('./config.json');
 
@@ -22,16 +22,21 @@ const QUIET_HOURS_ENABLED = (process.env.QUIET_HOURS_ENABLED || 'true') === 'tru
 
 client.once(Events.ClientReady, async (c) => {
     console.log(`Ready. Logged in as ${c.user.tag}`);
-  
-    if (QUIET_HOURS_ENABLED && isQuietHoursKST()) {
-      console.log('[Atlas] Quiet hours (KST 22:00~08:00). Skip startup announcements.');
-      return;
-    }
 
+    const suppressFlag = MessageFlags.SuppressNotifications;
     const channel = await c.channels.fetch(startUpChannel);
     if (channel?.isTextBased()) {
-      await channel.send('Intelligent System Analytic Computer is activated. All Atlas systems are functional and online.');
-      await channel.send('Atlas Agent ready to intelligence support.');
+      await channel.send({
+        content: 'Intelligent System Analytic Computer is activated. All Atlas systems are functional and online.',
+        suppressFlag,
+        allowedMentions: { parse: [] }
+      });
+      await channel.send({
+        content: 'Atlas Agent ready to intelligence support.',
+        suppressFlag,
+        allowedMentions: { parse: [] }
+      });
+      
     }
   });
 
@@ -64,15 +69,3 @@ const ctx = {
 registerInteractionRouter(client, ctx);
 
 client.login(token);
-
-function isQuietHoursKST(date = new Date()) {
-  const kstHour = Number(
-    new Intl.DateTimeFormat('en-US', {
-      timeZone: 'Asia/Seoul',
-      hour: '2-digit',
-      hour12: false,
-    }).format(date)
-  );
-
-  return kstHour >= 21 || kstHour < 8;
-}

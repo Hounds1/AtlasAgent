@@ -1,4 +1,5 @@
 const { MessageFlags } = require('discord.js');
+const { provideFlags } = require('../../../handlers/flag.provider');
 
 const MAX_LEN = 2000;
 const SAFE_MARGIN = 50;
@@ -51,13 +52,7 @@ async function deployInteraction(interaction, messages, options = {}) {
 
   messages.forEach((m, i) => assertLen(`messages[${i}]`, m));
 
-  const silent = quietHours && isQuietHoursKST();
-  const flags =
-    silent
-      ? (suppressEmbeds
-          ? (MessageFlags.SuppressNotifications | MessageFlags.SuppressEmbeds)
-          : MessageFlags.SuppressNotifications)
-      : (suppressEmbeds ? MessageFlags.SuppressEmbeds : undefined);
+  const flags = provideFlags();
 
   try {
     for (const msg of messages) {
