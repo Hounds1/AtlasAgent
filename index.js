@@ -18,25 +18,24 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds],
 });
 
-const QUIET_HOURS_ENABLED = (process.env.QUIET_HOURS_ENABLED || 'true') === 'true';
+// const QUIET_HOURS_ENABLED = (process.env.QUIET_HOURS_ENABLED || 'true') === 'true';
 
 client.once(Events.ClientReady, async (c) => {
     console.log(`Ready. Logged in as ${c.user.tag}`);
 
-    const suppressFlag = MessageFlags.SuppressNotifications;
+    const flags = MessageFlags.SuppressNotifications;
     const channel = await c.channels.fetch(startUpChannel);
     if (channel?.isTextBased()) {
       await channel.send({
         content: 'Intelligent System Analytic Computer is activated. All Atlas systems are functional and online.',
-        suppressFlag,
+        flags,
         allowedMentions: { parse: [] }
       });
       await channel.send({
         content: 'Atlas Agent ready to intelligence support.',
-        suppressFlag,
+        flags,
         allowedMentions: { parse: [] }
       });
-      
     }
   });
 
