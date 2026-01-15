@@ -28,9 +28,7 @@ function isQuietHoursKST() {
 
 async function deployInteraction(interaction, messages, options = {}) {
   const {
-    ephemeral = true,
-    quietHours = true,
-    suppressEmbeds = false,
+    ephemeral = false,
     notifyDone = false,
   } = options;
 
@@ -52,7 +50,7 @@ async function deployInteraction(interaction, messages, options = {}) {
 
   messages.forEach((m, i) => assertLen(`messages[${i}]`, m));
 
-  const flags = provideFlags();
+  const flags = provideFlags(); //include suppress flag
 
   try {
     for (const msg of messages) {
