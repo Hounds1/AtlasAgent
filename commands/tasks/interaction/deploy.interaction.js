@@ -11,21 +11,6 @@ function assertLen(label, text) {
   }
 }
 
-function getKstHour(date = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Asia/Seoul',
-    hour: '2-digit',
-    hour12: false,
-  }).formatToParts(date);
-
-  return Number(parts.find((p) => p.type === 'hour')?.value ?? '0');
-}
-
-function isQuietHoursKST() {
-  const h = getKstHour();
-  return h >= 19 || h < 8;
-}
-
 async function deployInteraction(interaction, messages, options = {}) {
   const {
     ephemeral = false,
@@ -41,9 +26,9 @@ async function deployInteraction(interaction, messages, options = {}) {
 
   try {
     if (!interaction.replied && !interaction.deferred) {
-      await interaction.reply({ content: '문서를 채널에 출력합니다.', ephemeral });
+      await interaction.reply({ content: '문서를 채널에 출력합니다.', ephemeral: false });
     } else {
-      await interaction.followUp({ content: '문서를 채널에 출력합니다.', ephemeral });
+      await interaction.followUp({ content: '문서를 채널에 출력합니다.', ephemeral: false });
     }
   } catch (_) {
   }
