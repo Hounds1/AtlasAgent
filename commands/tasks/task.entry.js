@@ -14,13 +14,29 @@ const embed = new EmbedBuilder()
         inline: false,
     },
     {
-        name: '업체 / 계정',
+        name: '업체',
         value: [
           '**/task1**',
-          '업체 / 계정 도메인의 요구 사항을 출력합니다.',
+          '업체 도메인의 요구 사항을 출력합니다.',
         ].join('\n'),
         inline: false,
     },
+    {
+      name: '업체',
+      value: [
+        '**/task2**',
+        '계정 도메인의 요구 사항을 출력합니다.',
+      ].join('\n'),
+      inline: false,
+    },
+    {
+      name: '인증/인가',
+      value: [
+        '**/task3**',
+        '인증/인가 기능의 요구 사항을 출력합니다.',
+      ].join('\n'),
+      inline: false,
+  },
   );
 
 const NAME = 'tasks';
