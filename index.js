@@ -79,7 +79,7 @@ client.once(Events.ClientReady, async (c) => {
 
     if (changelog.changes && changelog.changes.length > 0) {
       const changesList = changelog.changes.map(c => `• ${c}`).join('\n');
-      messageParts.push(`\n**What's new in v${changelog.version}:**\n${changesList}`);
+      messageParts.push(`\n**What's new in v${changelog.version}:**\n\`\`\`\n${changesList}\n\`\`\``);
     }
     
     messageParts.push(`\nAtlas Agent ready to intelligence support. (v${version})`);
