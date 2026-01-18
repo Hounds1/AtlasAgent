@@ -65,35 +65,27 @@ client.once(Events.ClientReady, async (c) => {
   const flags = MessageFlags.SuppressNotifications;
   const channel = await c.channels.fetch(startUpChannel);
   if (channel?.isTextBased()) {
-    await channel.send({
-      content: 'Intelligent System Analytic Computer is activated. All Atlas systems are confirmed online.',
-      flags,
-      allowedMentions: { parse: [] }
-    });
+    const messageParts = [];
+    
+    messageParts.push('Intelligent System Analytic Computer is activated. All Atlas systems are confirmed online.');
     
     const newCommandNames = (newCommands || [])
       .filter(name => commandMap.has(name));
     
     if (newCommandNames.length > 0) {
       const newCommandsList = newCommandNames.map(name => `\`/${name}\``).join(', ');
-      await channel.send({
-        content: `**Atlas launched with new commands:** ${newCommandsList}`,
-        flags,
-        allowedMentions: { parse: [] }
-      });
+      messageParts.push(`**Atlas launched with new commands:** ${newCommandsList}`);
     }
 
     if (changelog.changes && changelog.changes.length > 0) {
       const changesList = changelog.changes.map(c => `• ${c}`).join('\n');
-      await channel.send({
-        content: `\n**What's new in v${changelog.version}:**\n\n\`\`\`\n${changesList}\n\`\`\``,
-        flags,
-        allowedMentions: { parse: [] }
-      });
+      messageParts.push(`\n**What's new in v${changelog.version}:**\n${changesList}`);
     }
     
+    messageParts.push(`\nAtlas Agent ready to intelligence support. (v${version})`);
+
     await channel.send({
-      content: `\nAtlas Agent ready to intelligence support. (v${version})`,
+      content: messageParts.join('\n'),
       flags,
       allowedMentions: { parse: [] }
     });
