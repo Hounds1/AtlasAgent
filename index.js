@@ -2,7 +2,9 @@ const path = require('path');
 const { Client, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
 const { registerInteractionRouter } = require('./handlers/interactionRouter');
 const { initializeScheduler } = require('./lib/alert.scheduler');
-const { atlas, newCommands } = require('./config.json');
+const { newCommands } = require('./config.json');
+const { version } = require('./package.json');
+const changelog = require('./changelog.json');
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -54,8 +56,6 @@ const ctx = {
   commandMap,
 };
 
-const version = atlas.version;
-
 client.once(Events.ClientReady, async (c) => {
   console.log(`Ready. Logged in as ${c.user.tag}`);
 
@@ -66,7 +66,7 @@ client.once(Events.ClientReady, async (c) => {
   const channel = await c.channels.fetch(startUpChannel);
   if (channel?.isTextBased()) {
     await channel.send({
-      content: 'Intelligent System Analytic Computer is activated. All Atlas systems are functional and online.',
+      content: 'Intelligent System Analytic Computer is activated. All Atlas systems are confirmed online.',
       flags,
       allowedMentions: { parse: [] }
     });
@@ -74,15 +74,26 @@ client.once(Events.ClientReady, async (c) => {
     const newCommandNames = (newCommands || [])
       .filter(name => commandMap.has(name));
     
-    let updateMessage = `Atlas Agent ready to intelligence support. (v${version})`;
-    
     if (newCommandNames.length > 0) {
       const newCommandsList = newCommandNames.map(name => `\`/${name}\``).join(', ');
-      updateMessage = `**Atlas launched with new commands:** ${newCommandsList}\n\nAtlas Agent ready to intelligence support. (v${version})`;
+      await channel.send({
+        content: `**Atlas launched with new commands:** ${newCommandsList}`,
+        flags,
+        allowedMentions: { parse: [] }
+      });
+    }
+
+    if (changelog.changes && changelog.changes.length > 0) {
+      const changesList = changelog.changes.map(c => `• ${c}`).join('\n');
+      await channel.send({
+        content: `**What's new in v${changelog.version}:**\n${changesList}`,
+        flags,
+        allowedMentions: { parse: [] }
+      });
     }
     
     await channel.send({
-      content: updateMessage,
+      content: `Atlas Agent ready to intelligence support. (v${version})`,
       flags,
       allowedMentions: { parse: [] }
     });

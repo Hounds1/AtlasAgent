@@ -20,7 +20,6 @@ module.exports = {
     const alertId = interaction.options.getString('id');
     const guildId = interaction.guildId;
 
-    // 알림 조회
     const alert = getAlertById(alertId);
 
     if (!alert) {
@@ -30,7 +29,6 @@ module.exports = {
       });
     }
 
-    // 같은 길드의 알림인지 확인
     if (alert.guildId !== guildId) {
       return interaction.reply({
         content: '❌ 이 서버의 알림이 아닙니다.',
@@ -39,10 +37,7 @@ module.exports = {
     }
 
     try {
-      // 스케줄러에서 취소
       cancelScheduledAlert(alertId);
-
-      // 저장소에서 삭제
       removeAlert(alertId);
 
       await interaction.reply({

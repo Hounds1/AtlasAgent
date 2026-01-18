@@ -1,6 +1,5 @@
 {
   "atlas": {
-    "version": "1.2.0",
     "stage": "test"
   },
   "newCommands": ["alert", "alert-list", "alert-cancel"]

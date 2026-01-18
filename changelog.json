@@ -1,0 +1,10 @@
+{
+  "version": "1.2.1",
+  "changes": [
+    "Added /alert command for scheduling announcements",
+    "All /alert command elements are now required",
+    "Added /alert-list command to view scheduled alerts",
+    "Added /alert-cancel command to cancel scheduled alerts",
+    "Delayed announcements are now sent immediately after system restart"
+  ]
+}

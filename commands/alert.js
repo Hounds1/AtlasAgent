@@ -3,12 +3,7 @@ const { addAlert } = require('../lib/alert.store');
 const { scheduleAlert } = require('../lib/alert.scheduler');
 
 const NAME = 'alert';
-
-// KST 오프셋 (밀리초)
 const KST_OFFSET = 9 * 60 * 60 * 1000;
-
-// 환경변수에서 기본 알림 채널 ID 가져오기
-const DEFAULT_ALERT_CHANNEL_ID = process.env.ALERT_CHANNEL;
 
 module.exports = {
   name: NAME,
@@ -65,23 +60,14 @@ module.exports = {
     .addChannelOption(option =>
       option
         .setName('channel')
-        .setDescription('알림을 보낼 채널 (선택하지 않으면 기본 채널 사용)')
-        .setRequired(false)
+        .setDescription('알림을 보낼 채널')
+        .setRequired(true)
         .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
     ),
 
   async execute(interaction, ctx) {
-    // 사용자가 선택한 채널 또는 기본 채널 사용
     const selectedChannel = interaction.options.getChannel('channel');
-    const targetChannelId = selectedChannel?.id || DEFAULT_ALERT_CHANNEL_ID;
-
-    // 채널이 없으면 에러
-    if (!targetChannelId) {
-      return interaction.reply({
-        content: '❌ 알림 채널이 설정되지 않았습니다. 채널을 선택하거나 기본 채널을 설정해주세요.',
-        ephemeral: true,
-      });
-    }
+    const targetChannelId = selectedChannel.id;
 
     const year = interaction.options.getInteger('year');
     const month = interaction.options.getInteger('month');
@@ -90,13 +76,9 @@ module.exports = {
     const minute = interaction.options.getInteger('minute');
     const message = interaction.options.getString('message');
 
-    // KST 기준 Date 생성 후 UTC로 변환
-    // new Date(year, month-1, day, hour, minute)는 로컬 시간 기준이므로
-    // UTC 기준으로 KST 오프셋을 빼서 저장
     const kstDate = new Date(year, month - 1, day, hour, minute, 0, 0);
     const utcDate = new Date(kstDate.getTime() - KST_OFFSET);
 
-    // 유효한 날짜인지 확인
     if (isNaN(utcDate.getTime())) {
       return interaction.reply({
         content: '❌ 유효하지 않은 날짜입니다.',
@@ -104,7 +86,6 @@ module.exports = {
       });
     }
 
-    // 과거 시간 체크
     if (utcDate <= new Date()) {
       return interaction.reply({
         content: '❌ 과거 시간으로는 알림을 예약할 수 없습니다.',
@@ -112,19 +93,15 @@ module.exports = {
       });
     }
 
-    // 선택된 채널 권한 확인
-    if (selectedChannel) {
-      const permissions = selectedChannel.permissionsFor(interaction.client.user);
-      if (!permissions?.has('SendMessages')) {
-        return interaction.reply({
-          content: `❌ 봇이 ${selectedChannel} 채널에 메시지를 보낼 권한이 없습니다.`,
-          ephemeral: true,
-        });
-      }
+    const permissions = selectedChannel.permissionsFor(interaction.client.user);
+    if (!permissions?.has('SendMessages')) {
+      return interaction.reply({
+        content: `❌ 봇이 ${selectedChannel} 채널에 메시지를 보낼 권한이 없습니다.`,
+        ephemeral: true,
+      });
     }
 
     try {
-      // 알림 저장
       const alert = addAlert({
         channelId: targetChannelId,
         guildId: interaction.guildId,
@@ -134,10 +111,8 @@ module.exports = {
         scheduledAt: utcDate.toISOString(),
       });
 
-      // 스케줄러에 등록
       scheduleAlert(alert, interaction.client);
 
-      // 한국 시간 포맷
       const kstString = `${year}년 ${month}월 ${day}일 ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
       await interaction.reply({

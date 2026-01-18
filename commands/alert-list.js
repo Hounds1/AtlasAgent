@@ -2,8 +2,6 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { getAlertsByGuild } = require('../lib/alert.store');
 
 const NAME = 'alert-list';
-
-// KST 오프셋 (밀리초)
 const KST_OFFSET = 9 * 60 * 60 * 1000;
 
 function formatKST(isoString) {
@@ -36,7 +34,6 @@ module.exports = {
       });
     }
 
-    // 시간순 정렬
     alerts.sort((a, b) => new Date(a.scheduledAt) - new Date(b.scheduledAt));
 
     const embed = new EmbedBuilder()
@@ -45,7 +42,6 @@ module.exports = {
       .setDescription(`총 ${alerts.length}개의 알림이 예약되어 있습니다.`)
       .setTimestamp();
 
-    // 최대 10개까지만 표시
     const displayAlerts = alerts.slice(0, 10);
 
     for (const alert of displayAlerts) {
