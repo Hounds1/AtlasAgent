@@ -86,14 +86,14 @@ client.once(Events.ClientReady, async (c) => {
     if (changelog.changes && changelog.changes.length > 0) {
       const changesList = changelog.changes.map(c => `• ${c}`).join('\n');
       await channel.send({
-        content: `**What's new in v${changelog.version}:**\n${changesList}`,
+        content: `**What's new in v${changelog.version}:**\n\n\`\`\`\n${changesList}\n\`\`\``,
         flags,
         allowedMentions: { parse: [] }
       });
     }
     
     await channel.send({
-      content: `Atlas Agent ready to intelligence support. (v${version})`,
+      content: `\nAtlas Agent ready to intelligence support. (v${version})`,
       flags,
       allowedMentions: { parse: [] }
     });
