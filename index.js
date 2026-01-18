@@ -1,6 +1,7 @@
 const path = require('path');
 const { Client, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
 const { registerInteractionRouter } = require('./handlers/interactionRouter');
+const { initializeScheduler } = require('./lib/alert.scheduler');
 const { atlas, newCommands } = require('./config.json');
 
 const token = process.env.DISCORD_TOKEN;
@@ -30,6 +31,9 @@ const tasks = require('./commands/tasks/task.entry');
 const task1 = require('./commands/tasks/task.first');
 const task2 = require('./commands/tasks/task.sec');
 const task3 = require('./commands/tasks/task.third');
+const alert = require('./commands/alert');
+const alertList = require('./commands/alert-list');
+const alertCancel = require('./commands/alert-cancel');
 
 const commandMap = new Map([
   [atlasMe.name, atlasMe],
@@ -40,7 +44,10 @@ const commandMap = new Map([
   [tasks.name, tasks],
   [task1.name, task1],
   [task2.name, task2],
-  [task3.name, task3]
+  [task3.name, task3],
+  [alert.name, alert],
+  [alertList.name, alertList],
+  [alertCancel.name, alertCancel],
 ]);
 
 const ctx = {
@@ -51,6 +58,9 @@ const version = atlas.version;
 
 client.once(Events.ClientReady, async (c) => {
   console.log(`Ready. Logged in as ${c.user.tag}`);
+
+  // 저장된 알림 스케줄러 초기화
+  initializeScheduler(c);
 
   const flags = MessageFlags.SuppressNotifications;
   const channel = await c.channels.fetch(startUpChannel);

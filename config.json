@@ -1,7 +1,7 @@
 {
   "atlas": {
-    "version": "1.1.1",
+    "version": "1.2.0",
     "stage": "test"
   },
-  "newCommands": ["task3"]
+  "newCommands": ["alert", "alert-list", "alert-cancel"]
 }
